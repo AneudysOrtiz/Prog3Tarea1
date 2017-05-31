@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Calculadora</title>
+  </head>
+  <body>
+
+<style>
+
+#tbDatos{
+
+  border:solid 1px black;
+  width:100%;
+  padding: 8px;
+}
+
+#tbDatos thead{
+
+  background-color: #4CAF50;
+  color: white;
+}
+
+#det{
+  width: 100%;
+}
+
+#header{
+
+}
+
+tr:nth-child(even){
+  background-color: #f2f2f2}
+
+  .form {
+
+    margin-left: 400px;
+    margin-bottom: 30px;
+  }
+
+  .container {
+
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 30px;
+
+  }
+
+
+  .alert {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+</style>
+
+<div class="alert alert-info">
+  <center>
+    <h2>Calculadora De Prestamos</h2>
+    <h4>By Aneudys Ortiz</h4>
+  </center>
+</div>
+
+
+<div class="form">
+
+  <table>
+    <form>
+
+
+    <tr>
+      <td>
+        <label>Ingrese el monto del prestamo</label>
+      </td>
+      <td>
+        <input  id="prestamo" required type="number"/>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <label>Ingrese la duracion del prestamo (meses)</label>
+      </td>
+      <td>
+        <input id="meses" required type="number"/>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td>
+        <label>Ingrese el porcentaje de interes mensual</label>
+      </td>
+      <td>
+        <input id="interes"required type="number"/>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2" align="center">
+        <button type="button" onclick="Calcular();">Enviar</button>
+      </td>
+    </tr>
+
+</form>
+  </table>
+
+</div>
+
+
+    <div class="container">
+
+      <table id="det">
+        <thead>
+          <th></th>
+        </thead>
+        <tbody id="detalles">
+
+
+        </tbody>
+
+      </table>
+
+
+      <table id="tbDatos" class="table">
+
+        <thead>
+          <th>Mes</th>
+
+          <th>Saldo Inicial</th>
+
+          <th>Amortizacion</th>
+
+          <th>Interes</th>
+          <th>Pago</th>
+          <th>Saldo Final</th>
+        </thead>
+
+        <tbody id="tbCalc" align="center">
+
+        </tbody>
+
+      </table>
+
+
+
+
+    </div>
+
+
+<script>
+
+function round(num) {
+
+if (Number.isNaN(num)) {
+  return 0;
+}
+
+  else {
+    return +(Math.round(num + "e+2")  + "e-2");
+  }
+
+}
+
+  function Calcular(){
+
+
+
+    var prestamo=parseFloat(document.getElementById('prestamo').value);
+    var meses=parseInt(document.getElementById('meses').value);
+    var interes=parseFloat(document.getElementById('interes').value);
+
+    if (isNaN(prestamo) || isNaN(meses) || isNaN(interes)) {
+      alert("Debe llenar todos los campos!");
+    }else {
+
+
+
+    var cx = 1 + (interes / 100);
+    cx = 1 / cx;
+    cx = Math.pow(cx, meses);
+    cx = 1 - cx;
+    var res = ((interes / 100) * prestamo) / cx;
+
+
+            var saldoI = prestamo;
+            var interesP = (saldoI * interes) / 100;
+            var amortizacion = res - interesP;
+            var saldoF = saldoI - amortizacion;
+
+
+            alert("El monto mensual a pagar es de RD$ "+round(res));
+    destino = document.getElementById('tbCalc');
+    destino.innerHTML="";
+
+    var mes=0;
+
+    for(x=0;x<meses; x++){
+
+
+      tr=document.createElement('tr');
+      td1 = document.createElement('td');
+        mes=x+1;
+        td1.innerHTML = mes;
+
+        td2=document.createElement('tr');
+        td2.innerHTML="RD$ " + round(saldoI);
+
+      td3 = document.createElement('td');
+        td3.innerHTML="RD$ " + round(amortizacion);
+
+      td4 = document.createElement('td');
+        td4.innerHTML="RD$ " + round(interesP);
+
+        td5 = document.createElement('td');
+        td5.innerHTML="RD$ " + round(res);
+
+
+        td6 = document.createElement('td');
+
+if (x==meses-1) {
+  saldoF=0;
+  td6.innerHTML="RD$ " + saldoF;
+}else {
+  td6.innerHTML="RD$ " + round(saldoF);
+}
+
+
+
+
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        tr.appendChild(td5);
+        tr.appendChild(td6);
+
+
+      destino.appendChild(tr);
+
+
+        saldoI = saldoF;
+				interesP = (saldoI * interes) / 100;
+				 amortizacion = res - interesP;
+				 saldoF = saldoI - amortizacion;
+
+
+    }
+    detalles1=document.getElementById('detalles');
+    detalles1.innerHTML="";
+
+    trd1=document.createElement('tr');
+    trd2=document.createElement('tr');
+    trd3=document.createElement('tr');
+    trd4=document.createElement('tr');
+
+    tdd1 = document.createElement('td');
+    tdd1.innerHTML="El monto del Prestamo es de RD$ "+ prestamo;
+    trd1.appendChild(tdd1);
+
+    tdd2 = document.createElement('td');
+    tdd2.innerHTML="La duracion del prestamo es de "+ meses + " meses";
+    trd1.appendChild(tdd2);
+
+    tdd3 = document.createElement('td');
+    tdd3.innerHTML="La taza de interes es de un "+ interes+"%";
+    trd1.appendChild(tdd3);
+
+    tdd4 = document.createElement('td');
+    tdd4.innerHTML="El pago mensual es de RD$ "+ round(res);
+    trd1.appendChild(tdd4);
+
+    detalles1.appendChild(trd1);
+    detalles1.appendChild(trd2);
+    detalles1.appendChild(trd3);
+    detalles1.appendChild(trd4);
+
+    document.getElementById('meses').value='';
+    document.getElementById('prestamo').value='';
+    document.getElementById('interes').value='';
+
+}
+  }
+
+
+</script>
+
+  </body>
+</html>
